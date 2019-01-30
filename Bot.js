@@ -6,10 +6,41 @@ const Discord = require('discord.js');
 const config = require ("./config.json");
 const client = new Discord.Client();
 const prefix = ("suzu:");
+const activities_list = [
+  "with the suzu:help command.", 
+  "Hovercar Dodge!",
+  "with Unity prefabs", 
+  "with JavaScript",
+  "Visual studio",
+  "Bot Arena!!",
+  "the violin",
+  "windows XP startup sound",
+  "with the lights",
+  "DeSpAcItO",
+  "Big Chungus PS4",
+  "vines on youtube at 3 AM",
+  "minecraft 2",
+  "some dank memes",
+  "Stranger Things on Netflix",
+  "Lost In Space on Netflix",
+  "A Series Of Unfortunate Events on Netflix",
+  "Shrek, the anime",
+  "God",
+  "Astroneer",
+  "Pirates in the car I be in",
+  "WhoCanGetTheFluFirst",
+  "you thought i would put something funny here didnt you"
+  ]; // creates an arraylist containing phrases you want your bot to switch through.
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  
+  setInterval(() => 
+  {
+    const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
+    client.user.setActivity(activities_list[index]); // sets bot's activities to one of the phrases in the arraylist.
+  }, 10000); // Runs this every 10 seconds.
 });
+
 
 client.on('message', msg => {
   if (!msg.guild) return;
@@ -18,7 +49,7 @@ client.on('message', msg => {
     msg.reply('im not dead! it took ' + client.ping + 'ms to respond.');
   }
   else if (msg.content === prefix + 'help'){
-    msg.channel.send ('Hi there! below you can see some of my commands\n\nFirst off, you should know that my prefix is `suzu:` and will always be `suzu:`, use this in front of each command.\n\nping\nhi\npic (mention someone here)\n\nim always being updated because ree has the flu and has litteraly nothing else to do so if you have a suggestion, ping him!')
+    msg.channel.send ('Hi there! below you can see some of my commands\n\nFirst off, you should know that my prefix is `suzu:` and will always be `suzu:`, use this in front of each command.\n\nping\npic (mention someone here)\n\nim always being updated because ree has the flu and has litteraly nothing else to do so if you have a suggestion, ping him!')
   }
   else if (msg.content.startsWith (prefix + 'pic')){
     let user = msg.mentions.users.first();
