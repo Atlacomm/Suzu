@@ -62,9 +62,9 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   setInterval(() => 
   {
-    const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
-    client.user.setActivity(activities_list[index]); // sets bot's activities to one of the phrases in the arraylist.
-  }, 10000); // Runs this every 10 seconds.
+    const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
+    client.user.setActivity(activities_list[index]);
+  }, 10000);
   client.guilds.forEach((guild) => {
     console.log(" - " + guild.name)
   });
@@ -73,7 +73,6 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   if (!msg.guild) return;
-  //And now, commands
   if (msg.content === prefix + 'ping') {
     console.log(client.ping);
     const pmessage = Math.floor(Math.random() * (pinglist.length - 1) + 1);
@@ -81,14 +80,15 @@ client.on('message', msg => {
     msg.reply((pinglist[pmessage]) + 'it took ' + round + 'ms to respond.');
   }
   else if (msg.content === prefix + 'help'){
-    msg.channel.send ('Hi there! below you can see some of my commands\n\nFirst off, you should know that my prefix is `suzu:` and will always be `suzu:`, use this in front of each command.\n\nping\npic (mention someone here)\n\nim always being updated and my owner has litteraly nothing else to do so if you have a suggestion, ping him!\n\nplease note that my code is mostly ServerLion\'s because Ree cant code')
-  }
-  else if (msg.content.startsWith (prefix + 'pic')){
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("Help for Suzu");
+    embed.setColor("green");
+    embed.addField("Commands", "ping\npic\nkick\nban")
+    embed.setFooter("Note: my code is mostly ServerLion's because Ree cant code.");
+  }else if (msg.content.startsWith (prefix + 'pic')){
     let user = msg.mentions.users.first();
       if (user) {
-        // Now we get the member from the user
         const member = msg.guild.member(user);
-        // If the member is in the guild
         if (member) {
             msg.reply (user.avatarURL);
         }
@@ -102,78 +102,37 @@ client.on('message', msg => {
       msg.reply("Hold up! You aren't Ree!");
       return;
     }
-    // Assuming we mention someone in the msg, this will return the user
-    // Read more about mentions over at https://discord.js.org/#/docs/main/stable/class/MessageMentions
     let user = msg.mentions.users.first();
-    // If we have a user mentioned
-    if (user) {
-      // Now we get the member from the user
       const member = msg.guild.member(user);
-      // If the member is in the guild
       if (member) {
-        /**
-         * Kick the member
-         * Make sure you run this on a member, not a user!
-         * There are big differences between a user and a member
-         */
         member.kick('Optional reason that will display in the audit logs').then(() => {
-          // We let the msg author know we were able to kick the person
           msg.reply(`Successfully kicked ${user.tag}`);
         }).catch(err => {
-          // An error happened
-          // This is generally due to the bot not being able to kick the member,
-          // either due to missing permissions or role hierarchy
           msg.reply('I was unable to kick the member');
-          // Log the error
           console.error(err);
         });
-      } else {
-        // The mentioned user isn't in this guild
-        msg.reply('That user isn\'t in this guild!');
-      }
-    // Otherwise, if no user was mentioned
-    } else {
-      msg.reply('You didn\'t mention the user to kick!');
     }
-  }
-  else if (msg.content.startsWith(prefix + 'ban')) {
+  } else if (msg.content.startsWith(prefix + 'ban')) {
     if (msg.author.id != "472923135965003786"){
       msg.reply("Hold up! You aren't Ree!");
       return;
     }
     let user = msg.mentions.users.first();
-    // If we have a user mentioned
     if (user) {
-      // Now we get the member from the user
       const member = msg.guild.member(user);
-      // If the member is in the guild
       if (member) {
-        /**
-         * Ban the member
-         * Make sure you run this on a member, not a user!
-         * There are big differences between a user and a member
-         * Read more about what ban options there are over at
-         * https://discord.js.org/#/docs/main/stable/class/GuildMember?scrollTo=ban
-         */
         member.ban({
           reason: 'They were bad!',
         }).then(() => {
-          // We let the message author know we were able to ban the person
           msg.reply(`Successfully banned ${user.tag}`);
         }).catch(err => {
-          // An error happened
-          // This is generally due to the bot not being able to ban the member,
-          // either due to missing permissions or role hierarchy
           msg.reply('I was unable to ban the member');
-          // Log the error
           console.error(err);
         });
       } else {
-        // The mentioned user isn't in this guild
         msg.reply('That user isn\'t in this guild!');
       }
     } else {
-    // Otherwise, if no user was mentioned
       msg.reply('You didn\'t mention the user to ban!');
     }
   }
@@ -186,11 +145,5 @@ client.on('guildMemberAdd', member => {
     let channel = member.guild.channels.find(ch => ch.name === 'general');
     channel.send(`Welcome to the server, ${member}`);
   });
-
-
-
-  
-
-
 
 client.login(config.token);
