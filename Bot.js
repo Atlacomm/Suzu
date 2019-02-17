@@ -6,16 +6,6 @@ const Discord = require('discord.js');
 const config = require ("./config.json");
 const client = new Discord.Client();
 const prefix = ("suzu:");
-const pinglist = [
-  "heya! ",
-  "heya! ",
-  "whats up? ",
-  "sorry if im late! ",
-  "did someone say something? ",
-  "tell AstralMod I said hi! ",
-  "to ping or not to ping, ",
-  "heya! "
-];
 const activities_list = [
   "with the suzu:help command.", 
   "Hovercar Dodge!",
@@ -75,31 +65,53 @@ client.on('message', msg => {
   if (!msg.guild) return;
   if (msg.content === prefix + 'ping') {
     console.log(client.ping);
-    const pmessage = Math.floor(Math.random() * (pinglist.length - 1) + 1);
     var round =Math.round(client.ping); 
-    msg.reply((pinglist[pmessage]) + 'it took ' + round + 'ms to respond.');
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("Client Ping");
+    embed.setColor(0x16ff00);
+    embed.addField("ping", "it took me " + round + " ms to respond")
+    embed.setFooter("use suzu:help to see all of my commands");
+    msg.channel.send({embed});
   }
   else if (msg.content === prefix + 'help'){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Help for Suzu");
-    embed.setColor("green");
-    embed.addField("Commands", "ping\npic\nkick\nban")
+    embed.setColor(0x16ff00);
+    embed.addField("Commands", "ping\npic")
+    embed.addField("Moderation", "\nkick\nban")
     embed.setFooter("Note: my code is mostly ServerLion's because Ree cant code.");
+    msg.channel.send({embed});
   }else if (msg.content.startsWith (prefix + 'pic')){
     let user = msg.mentions.users.first();
       if (user) {
         const member = msg.guild.member(user);
         if (member) {
-            msg.reply (user.avatarURL);
+          let embed = new Discord.RichEmbed();
+          embed.setTitle("profile picture");
+          embed.setColor(0x16ff00);
+          embed.addField("here is the profile picture!", "need anything else?:grin:");
+          embed.setImage(user.avatarURL);
+          embed.setFooter("use suzu:help to see all of my commands");
+          msg.channel.send({embed});
+          
+          
         }
     }
     else{
-      msg.reply(msg.author.avatarURL);
+      let embed = new Discord.RichEmbed();
+      embed.setTitle("profile picture");
+      embed.setColor(0x16ff00);
+      embed.addField("here is your profile picture!", "I must say, you look flattering!:stuck_out_tongue_winking_eye:")
+      embed.setImage(msg.author.avatarURL);
+      embed.setFooter("use suzu:help to see all of my commands");
+      msg.channel.send({embed});
+      
+      
     }
   } 
   else if (msg.content.startsWith (prefix + 'kick')){
     if (msg.author.id != "472923135965003786"){
-      msg.reply("Hold up! You aren't Ree!");
+      msg.reply("Hold up! You aren't Ree!:thinking:");
       return;
     }
     let user = msg.mentions.users.first();
@@ -114,7 +126,7 @@ client.on('message', msg => {
     }
   } else if (msg.content.startsWith(prefix + 'ban')) {
     if (msg.author.id != "472923135965003786"){
-      msg.reply("Hold up! You aren't Ree!");
+      msg.reply("Hold up! You aren't Ree!:thinking:");
       return;
     }
     let user = msg.mentions.users.first();
@@ -136,14 +148,41 @@ client.on('message', msg => {
       msg.reply('You didn\'t mention the user to ban!');
     }
   }
+  else if(msg.content === prefix + 'RESET'){
+    if (msg.author.id != "472923135965003786"){
+      msg.reply("Hold up! You aren't Ree!:thinking:");
+      return;
+    }
+    resetBot(msg.channel);
+  }
   else if(msg.content.startsWith(prefix)){
-    msg.reply('this is an unknown command, you can use `suzu:help` for more information on what my commands are.')
+    msg.reply('this is an unknown command:cold_sweat:, you can use `suzu:help` for more information on what my commands are.')
   }
 });
 
+
 client.on('guildMemberAdd', member => {
     let channel = member.guild.channels.find(ch => ch.name === 'general');
-    channel.send(`Welcome to the server, ${member}`);
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("New Member!");
+    embed.setColor(0x16ff00);
+    embed.addField('oh, you must be new.', 'welcome to the server, ' + member.user.username);
+    embed.setFooter("use suzu:help to see all of my commands");
+    channel.send({embed});
+    
   });
+function resetBot(channel) {
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("RESET");
+    embed.setColor(0xff0000);
+    embed.addField('NOW RESETTING SUZU', 'REBOOTING');
+    embed.setFooter("CLIENT MAY TAKE A WHILE TO COME BACK ONLINE");
+    channel.send({embed})
+    .then(msg => client.destroy())
+    .then(() => client.login(config.token));
+  }
+
+
+
 
 client.login(config.token);
