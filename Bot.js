@@ -256,9 +256,9 @@ client.on('guildMemberAdd', member => {
     if (message.channel.guild.id != "537101504864190464") return;
     let channel = client.channels.find(ch => ch.id === '539142431552176139');
     let embed = new Discord.RichEmbed();
-    embed.setTitle(":wastebasket:");
-    embed.setColor('red');
-    embed.setDescription('Message by ' + message.author.tag + ' deleted on ' + new Date());
+    embed.setTitle(":wastebasket: Message Delete");
+    embed.setColor(0xFF0000);
+    embed.setDescription('Message by ' + message.author.username + ' deleted on ' + new Date());
     embed.addField("Message content", message);
     channel.send({embed});
   });
@@ -269,14 +269,14 @@ client.on('guildMemberAdd', member => {
     if (newMessage == oldMessage) return;
     let channel = client.channels.find(ch => ch.id === '539142431552176139');
     let embed = new Discord.RichEmbed();
-    embed.setTitle(":wastebasket:");
-    embed.setColor('orange');
-    embed.setDescription('Message by ' + oldMessage.author.tag + ' edited on ' + new Date());
+    embed.setTitle(":pencil: Message Edit");
+    embed.setColor(0xFF4500);
+    embed.setDescription('Message by ' + oldMessage.author.username + ' edited on ' + new Date());
     embed.addField("Old Message", oldMessage + " ");
     embed.addField("New Message", newMessage + " ");
     channel.send({embed});  
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }  
   });
 function resetBot(channel) {
