@@ -45,7 +45,19 @@ const activities_list = [
   "with google",
   "Hulu",
   "pinging @Swingin30",
-  "the crash report screen"
+  "the crash report screen",
+  "why do I keep crashing ayy lmao",
+  "playing now",
+  "i smell like beef",
+  "Overwatch",
+  "MY DOG JUST RAN OUt tHe dOoR aGaIn",
+  "h",
+  "BAN ALL FURrIEs",
+  "owo",
+  "uwu",
+  "uwo",
+  "OwO",
+  "with shit im not supposed to play with"
   ]; // creates an arraylist containing phrases you want your bot to switch through.
 
 client.on('ready', async () => {
@@ -62,12 +74,36 @@ client.on('ready', async () => {
     embed.setFooter("running startup commands in 6 seconds");
     let msg = await channel.send({embed})
     setTimeout(() => {
+        embed.setFooter("running startup commands in 5 seconds");
+        msg.edit({embed});
+    }, 1000)
+    setTimeout(() => {
+      embed.setFooter("running startup commands in 4 seconds");
+      msg.edit({embed});
+    }, 2000)
+    setTimeout(() => {
+      embed.setFooter("running startup commands in 3 seconds");
+     msg.edit({embed});
+    }, 3000)
+    setTimeout(() => {
+      embed.setFooter("running startup commands in 2 seconds");
+     msg.edit({embed});
+    }, 4000)
+    setTimeout(() => {
+      embed.setFooter("running startup commands in 1 seconds");
+     msg.edit({embed});
+    }, 5000)
+    setTimeout(() => {
       var round =Math.round(client.ping);
         embed.setColor(0x16ff00);
         embed.addField('Client Ping', 'the client took ' + round + 'ms to respond.' )
         embed.setFooter("use suzu:help to see all of my commands");
         msg.edit({embed});
-    }, 6000);
+    }, 6000).catch(err => {
+      console.log("on ready event error");
+      console.error(err);
+    })
+    
 
   })
   
@@ -79,11 +115,12 @@ client.on('ready', async () => {
   }, 10000);
   client.guilds.forEach((guild) => {
     console.log(" - " + guild.name)
+    
   
 });
 
 
-client.on('message', msg => {
+client.on('message', msg=> {
   if (!msg.guild) return;
   if (msg.content === prefix + 'ping') {
     console.log(client.ping);
@@ -101,6 +138,7 @@ client.on('message', msg => {
     embed.setColor(0x16ff00);
     embed.addField("Commands", "ping\npic")
     embed.addField("Moderation", "\nkick\nban")
+    embed.addField("Bot Managment", "\nRESET")
     embed.setFooter("Note: my code is mostly ServerLion's because Ree cant code.");
     msg.channel.send({embed});
   }else if (msg.content.startsWith (prefix + 'pic')){
@@ -194,6 +232,9 @@ client.on('message', msg => {
     embed.setFooter("use suzu:help to see all of my commands");
     msg.channel.send({embed})
   }
+  else if(msg.content === prefix + 'yell at cylex'){
+    msg.channel.send("cylex, nobody cares about the caps lock.")
+  }
   else if(msg.content.startsWith(prefix)){
     let embed = new Discord.RichEmbed();
     embed.setTitle("UNKNOWN COMMAND");
@@ -218,8 +259,4 @@ client.on('guildMemberAdd', member => {
 function resetBot(channel) {
     process.exit(0)
   }
-
-
-
-
 client.login(config.token);
