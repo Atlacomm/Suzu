@@ -48,22 +48,30 @@ const activities_list = [
   "the crash report screen"
   ]; // creates an arraylist containing phrases you want your bot to switch through.
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   let channel = client.channels.find(ch => ch.id === '537119674828324890');
-  let embed = new Discord.RichEmbed();
+  let embed = new Discord.RichEmbed();   
+
+
     embed.setTitle("ONLINE");
     embed.setColor(0xfffd00);
     embed.addField('BOT RESET SUCCESSFULLY', 'SUZU IS NOW ONLINE. if the bot was not told to reset please contact **Rest in peace, Opportunity.#9105** immediately as this message is now unsolicited and needs to be addressed as soon as possible, for it could be due to a crash.');
-    embed.setFooter("Now running post startup commands...");
-    channel.send({embed})
-  var round =Math.round(client.ping); 
-  let secondembed = new Discord.RichEmbed();
-    secondembed.setTitle("Client Ping");
-    secondembed.setColor(0x16ff00);
-    secondembed.addField("ping", "it took me " + round + " ms to respond, you may now use me as you normally would")
-    secondembed.setFooter("use suzu:help to see all of my commands");
-    channel.send({secondembed});
+    
+
+    embed.setFooter("running startup commands in 6 seconds");
+    let msg = await channel.send({embed})
+    setTimeout(() => {
+      var round =Math.round(client.ping);
+        embed.setColor(0x16ff00);
+        embed.addField('Client Ping', 'the client took ' + round + 'ms to respond.' )
+        embed.setFooter("use suzu:help to see all of my commands");
+        msg.edit({embed});
+    }, 6000);
+
+  })
+  
+  
   setInterval(() => 
   {
     const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
@@ -71,7 +79,7 @@ client.on('ready', () => {
   }, 10000);
   client.guilds.forEach((guild) => {
     console.log(" - " + guild.name)
-  });
+  
 });
 
 
