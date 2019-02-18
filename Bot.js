@@ -56,7 +56,7 @@ client.on('ready', async () => {
 
     embed.setTitle("ONLINE");
     embed.setColor(0xfffd00);
-    embed.addField('BOT RESET SUCCESSFULLY', 'SUZU IS NOW ONLINE. if the bot was not told to reset please contact **Rest in peace, Opportunity.#9105** immediately as this message is now unsolicited and needs to be addressed as soon as possible, for it could be due to a crash.');
+    embed.addField('BOT RESET SUCCESSFULLY', 'SUZU IS NOW ONLINE. **WARNING, IF THIS BOT KEEPS SENDING THIS MESSAGE, PLEASE PING AN ADMIN IMMEDIATELY**. if the bot was not told to reset please contact **Rest in peace, Opportunity.#9105** immediately as this message is now unsolicited and needs to be addressed as soon as possible, for it could be due to a crash.');
     
 
     embed.setFooter("running startup commands in 6 seconds");
@@ -186,8 +186,21 @@ client.on('message', msg => {
       resetBot(); 
     }, 3000);
   }
+  else if(msg.content === prefix + 'about'){
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("About Bot");
+    embed.setColor(0x16ff00);
+    embed.addField('information:', 'Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server, it was developed by **Rest in peace, Opportunity#9105** and **ServerLion#1789**. you can go to the github repository [here](https://github.com/cjthomp2005/Suzu/) and you can go to the Hovercar Dodge discord server [here](https://discord.gg/3VNHTBg).')
+    embed.setFooter("use suzu:help to see all of my commands");
+    msg.channel.send({embed})
+  }
   else if(msg.content.startsWith(prefix)){
-    msg.reply('this is an unknown command:cold_sweat:, you can use `suzu:help` for more information on what my commands are.')
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("UNKNOWN COMMAND");
+    embed.setColor(0xff0000);
+    embed.addField('ERROR: unknown command', 'please use **suzu:help** to see all available commands.')
+    embed.setFooter("use suzu:help to see all of my commands");
+    msg.channel.send({embed})
   }
 });
 
