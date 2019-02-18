@@ -3,7 +3,7 @@ Suzu! A bot for the Hovercar Dodge! server
 Designed and Programed by Ree (but serverlion and cylex helped me because my programming is gei)
 */
 const Discord = require('discord.js');
-//const config = require ("./config.json");
+const config = require ("./config.json");
 const client = new Discord.Client();
 const prefix = ("suzu:");
 const activities_list = [
@@ -300,5 +300,4 @@ client.on('guildMemberAdd', member => {
 function resetBot(channel) {
     process.exit(0)
   }
-//client.login(config.token);
-client.login("NDY3MDEwNTU2ODAxNDQ5OTg1.D0ya1w.A_zX34ED1QYP2rWofinMl4W6gwI");
+client.login(config.token);
