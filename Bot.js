@@ -67,24 +67,12 @@ client.on('ready', async () => {
 
 
     embed.setTitle("ONLINE");
-    embed.setColor(0xfffd00);
     embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
+    embed.setColor(0x16ff00);
+    embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
+    embed.setFooter("Use suzu:help to see all of my commands");
+    channel.send({embed});
     
-
-    embed.setFooter("running startup commands...");
-    let msg = await channel.send({embed})
-    setTimeout(() => {
-      var round =Math.round(client.ping);
-      embed.setColor(0x16ff00);
-      embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
-      embed.setFooter("Use suzu:help to see all of my commands");
-      msg.edit({embed});
-    }, 6000).catch(err => {
-      console.log("on ready event error");
-      console.error(err);
-    })
-    
-
   })
   
   
