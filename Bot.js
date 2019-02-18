@@ -62,15 +62,22 @@ const activities_list = [
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  let channel = client.channels.find(ch => ch.id === '537119674828324890');
+  let channel = client.channels.find(ch => ch.id === '539142431552176139');
   let embed = new Discord.RichEmbed(); 
+  
   try{  
-  embed.setTitle("ONLINE");
-    embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
-    embed.setColor(0x16ff00);
-    embed.addField('Client Ping', `The client took **${Math.round(client.ping)}ms** to respond.`);
+    embed.setTitle("ONLINE");
+    embed.addField('Suzu is now starting up', 'The bot has started. This may be due to a crash or an owner calling the reset function. please wait for the inicator to turn green before sending any commands, just incase.');
+    embed.setColor(0xfff400);
     embed.setFooter("Use suzu:help to see all of my commands");
-    channel.send({embed});
+    let msg = await channel.send({embed})
+    setTimeout(() => {
+      var round =Math.round(client.ping);
+        embed.setColor(0x16ff00);
+        embed.addField('Client Ping', ':signal_strength: the client took ' + round + 'ms to respond.' )
+        msg.edit({embed});
+    }, 3000);
+    
   } catch (error) {
     console.error(error);
   }
@@ -97,7 +104,7 @@ client.on('message', msg=> {
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");
     embed.setColor(0x16ff00);
-    embed.setDescription(`It took me **  ${Math.round(client.ping)} ms ** to respond.`);
+    embed.setDescription(":signal_strength: It took me **  ${Math.round(client.ping)} ms ** to respond.");
     embed.setFooter("use suzu:help to see all of my commands");
     msg.channel.send({embed});
   }
@@ -180,13 +187,14 @@ client.on('message', msg=> {
   }
   else if(msg.content === prefix + 'RESET'){
     if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689"){ 
+      let channel = client.channels.find(ch => ch.id === '539142431552176139');
       console.log('Restarting...')
       let embed = new Discord.RichEmbed();
       embed.setTitle("RESET");
       embed.setColor(0xff0000);
       embed.setDescription('Suzu will now restart.');
       embed.setFooter("This may take a while...");
-      msg.channel.send({embed})
+      channel.send({embed})
       setTimeout(function(){ 
         resetBot(); 
       }, 3000);
@@ -208,11 +216,14 @@ client.on('message', msg=> {
   else if(msg.content === prefix + 'yell at cylex'){
     msg.channel.send("cylex, nobody cares about the caps lock.")
   }
+  else if(msg.content.startsWith(prefix + 'y\'all')){
+    msg.reply('I can see you are a southerner as well')
+  }
   else if(msg.content.startsWith(prefix)){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Unknown Command");
     embed.setColor(0xff0000);
-    embed.setDescription('Please use **suzu:help** to see all available commands.')
+    embed.setDescription('Please use **suzu:help** to see all available commands. some commands may not be available to you depending on your role.')
     msg.channel.send({embed})
   }
 } catch (error) {
