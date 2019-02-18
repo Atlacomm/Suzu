@@ -3,7 +3,7 @@ Suzu! A bot for the Hovercar Dodge! server
 Designed and Programed by Ree (but serverlion and cylex helped me because my programming is gei)
 */
 const Discord = require('discord.js');
-const config = require ("./config.json");
+//const config = require ("./config.json");
 const client = new Discord.Client();
 const prefix = ("suzu:");
 const activities_list = [
@@ -68,7 +68,7 @@ client.on('ready', async () => {
 
     embed.setTitle("ONLINE");
     embed.setColor(0xfffd00);
-    embed.addField('BOT RESET SUCCESSFULLY', 'SUZU IS NOW ONLINE. **WARNING, IF THIS BOT KEEPS SENDING THIS MESSAGE, PLEASE PING AN ADMIN IMMEDIATELY**. if the bot was not told to reset please contact **Rest in peace, Opportunity.#9105** immediately as this message is now unsolicited and needs to be addressed as soon as possible, for it could be due to a crash.');
+    embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
     
 
     embed.setFooter("running startup commands in 6 seconds");
@@ -90,14 +90,14 @@ client.on('ready', async () => {
      msg.edit({embed});
     }, 4000)
     setTimeout(() => {
-      embed.setFooter("running startup commands in 1 seconds");
+      embed.setFooter("running startup commands in 1 second.");
      msg.edit({embed});
     }, 5000)
     setTimeout(() => {
       var round =Math.round(client.ping);
         embed.setColor(0x16ff00);
-        embed.addField('Client Ping', 'the client took ' + round + 'ms to respond.' )
-        embed.setFooter("use suzu:help to see all of my commands");
+        embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
+        embed.setFooter("Use suzu:help to see all of my commands");
         msg.edit({embed});
     }, 6000).catch(err => {
       console.log("on ready event error");
@@ -124,11 +124,10 @@ client.on('message', msg=> {
   if (!msg.guild) return;
   if (msg.content === prefix + 'ping') {
     console.log(client.ping);
-    var round =Math.round(client.ping); 
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");
     embed.setColor(0x16ff00);
-    embed.addField("ping", "it took me " + round + " ms to respond")
+    embed.setDescription("It took me **" + Math.round(client.ping) + " ms** to respond.")
     embed.setFooter("use suzu:help to see all of my commands");
     msg.channel.send({embed});
   }
@@ -137,47 +136,44 @@ client.on('message', msg=> {
     embed.setTitle("Help for Suzu");
     embed.setColor(0x16ff00);
     embed.addField("Commands", "ping\npic")
-    embed.addField("Moderation", "\nkick\nban")
-    embed.addField("Bot Managment", "\nRESET")
-    embed.setFooter("Note: my code is mostly ServerLion's because Ree cant code.");
+    if (msg.member.hasPermission("KICK_MEMBERS")){ embed.addField("Moderation", "\nkick\nban\nnuke")}
+    if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689"){embed.addField("Bot Managment", "\nRESET")}
+    embed.setFooter("Developed by Ree and ServerLion.");
     msg.channel.send({embed});
-  }else if (msg.content.startsWith (prefix + 'pic')){
+  } else if (msg.content.startsWith (prefix + 'pic')){
     let user = msg.mentions.users.first();
       if (user) {
         const member = msg.guild.member(user);
         if (member) {
           let embed = new Discord.RichEmbed();
-          embed.setTitle("profile picture");
+          embed.setTitle("Profile Picture");
           embed.setColor(0x16ff00);
-          embed.addField("here is the profile picture!", "need anything else?:grin:");
           embed.setImage(user.avatarURL);
           embed.setFooter("use suzu:help to see all of my commands");
-          msg.channel.send({embed});
-          
-          
-        }
-    }
-    else{
+          msg.channel.send({embed});   
+       }
+    }else{
       let embed = new Discord.RichEmbed();
-      embed.setTitle("profile picture");
+      embed.setTitle("Profile Picture");
       embed.setColor(0x16ff00);
-      embed.addField("here is your profile picture!", "I must say, you look flattering!:stuck_out_tongue_winking_eye:")
+      embed.setDescription("I must say, you look flattering! :stuck_out_tongue_winking_eye:")
       embed.setImage(msg.author.avatarURL);
       embed.setFooter("use suzu:help to see all of my commands");
-      msg.channel.send({embed});
-      
-      
+      msg.channel.send({embed});     
     }
-  } 
-  else if (msg.content.startsWith (prefix + 'kick')){
-    if (msg.author.id != "472923135965003786"){
-      msg.reply("Hold up! You aren't Ree!:thinking:");
+  } else if (msg.content.startsWith (prefix + 'nuke')){
+    msg.channel.send(":radioactive: Nuking Channel...");
+    msg.channel.bulkDelete(99, true);
+    msg.channel.send(":radioactive: Nuked Channel.");
+  } else if (msg.content.startsWith (prefix + 'kick')){
+    if (!msg.member.hasPermission("KICK_MEMBERS")){
+      msg.reply("Hold up! You aren't allowed to kick members!");
       return;
     }
     let user = msg.mentions.users.first();
       const member = msg.guild.member(user);
       if (member) {
-        member.kick('Optional reason that will display in the audit logs').then(() => {
+        member.kick('Kicked by ' + msg.author.username + ' using Suzu.').then(() => {
           msg.reply(`Successfully kicked ${user.tag}`);
         }).catch(err => {
           msg.reply('I was unable to kick the member');
@@ -185,8 +181,8 @@ client.on('message', msg=> {
         });
     }
   } else if (msg.content.startsWith(prefix + 'ban')) {
-    if (msg.author.id != "472923135965003786"){
-      msg.reply("Hold up! You aren't Ree!:thinking:");
+    if (!msg.member.hasPermission("BAN_MEMBERS")){
+      msg.reply("Hold up! You aren't allowed to ban members!");
       return;
     }
     let user = msg.mentions.users.first();
@@ -194,7 +190,7 @@ client.on('message', msg=> {
       const member = msg.guild.member(user);
       if (member) {
         member.ban({
-          reason: 'They were bad!',
+          reason: 'Banned by ' + msg.author.username + ' using Suzu.',
         }).then(() => {
           msg.reply(`Successfully banned ${user.tag}`);
         }).catch(err => {
@@ -209,27 +205,30 @@ client.on('message', msg=> {
     }
   }
   else if(msg.content === prefix + 'RESET'){
-    if (msg.author.id != "472923135965003786"){
-      msg.reply("Hold up! You aren't Ree!:thinking:");
+    if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689"){ 
+      console.log('Restarting...')
+      let embed = new Discord.RichEmbed();
+      embed.setTitle("RESET");
+      embed.setColor(0xff0000);
+      embed.setDescription('Suzu will now restart.');
+      embed.setFooter("This may take a while...");
+      msg.channel.send({embed})
+      setTimeout(function(){ 
+        resetBot(); 
+      }, 3000);
+    } else {
+      msg.reply("Hold up! You aren't a dev! :thinking:");
       return;
     }
-    console.log('RESETTING BOT')
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("RESET");
-    embed.setColor(0xff0000);
-    embed.addField('NOW RESETTING SUZU', 'REBOOTING');
-    embed.setFooter("CLIENT MAY TAKE A WHILE TO COME BACK ONLINE");
-    msg.channel.send({embed})
-    setTimeout(function(){ 
-      resetBot(); 
-    }, 3000);
   }
   else if(msg.content === prefix + 'about'){
     let embed = new Discord.RichEmbed();
     embed.setTitle("About Bot");
     embed.setColor(0x16ff00);
-    embed.addField('information:', 'Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server, it was developed by **Rest in peace, Opportunity#9105** and **ServerLion#1789**. you can go to the github repository [here](https://github.com/cjthomp2005/Suzu/) and you can go to the Hovercar Dodge discord server [here](https://discord.gg/3VNHTBg).')
-    embed.setFooter("use suzu:help to see all of my commands");
+    embed.setDescription('Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server')
+    embed.addField("Developers", "Rest in peace, Opportunity.#9105\nServerLion#1789");
+    embed.addField("Links", "[Github](https://github.com/cjthomp2005/Suzu)\n[Discord](https://discord.gg/t9JTUb)");
+    embed.setFooter("Use suzu:help to see all of my commands");
     msg.channel.send({embed})
   }
   else if(msg.content === prefix + 'yell at cylex'){
@@ -237,10 +236,9 @@ client.on('message', msg=> {
   }
   else if(msg.content.startsWith(prefix)){
     let embed = new Discord.RichEmbed();
-    embed.setTitle("UNKNOWN COMMAND");
+    embed.setTitle("Unknown Command");
     embed.setColor(0xff0000);
-    embed.addField('ERROR: unknown command', 'please use **suzu:help** to see all available commands.')
-    embed.setFooter("use suzu:help to see all of my commands");
+    embed.setDescription('Please use **suzu:help** to see all available commands.')
     msg.channel.send({embed})
   }
 });
@@ -251,12 +249,56 @@ client.on('guildMemberAdd', member => {
     let embed = new Discord.RichEmbed();
     embed.setTitle("New Member!");
     embed.setColor(0x16ff00);
-    embed.addField('oh, you must be new.', 'welcome to the server, ' + member.user.username);
+    embed.setDescription('Welcome to the server, ' + member.user.username);
     embed.setFooter("use suzu:help to see all of my commands");
     channel.send({embed});
-    
+    if (member.guild.id != "537101504864190464") return;
+    channel = client.channels.find(ch => ch.id === '539142431552176139');
+    channel.send(":arrow_right: " + member.user.tag);
+  });
+  client.on('guildMemberRemove', member => {
+    if (member.guild.id != "537101504864190464") return;
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    channel.send(":arrow_left: " + member.user.tag);
+  });
+  client.on('guildBanAdd', (guild, user) => {
+    if (guild.id != "537101504864190464") return;
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    channel.send(":hammer: Banned User: " + user.tag)
+  });
+  client.on('guildBanRemove', (guild, user) => {
+    if (user.guild.id != "537101504864190464") return;
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    channel.send(":no_entry_sign: :hammer: Unbanned User: " + user.tag)
+  });
+  client.on('channelCreate', channel => {
+    if (channel.guild.id != "537101504864190464") return;
+    channel.send("First");
+  });
+  client.on('messageDelete', message => {
+    if (message.channel.guild.id != "537101504864190464") return;
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    let embed = new Discord.RichEmbed();
+    embed.setTitle(":wastebasket:");
+    embed.setColor('red');
+    embed.setDescription('Message by ' + message.author.tag + ' deleted on ' + new Date());
+    embed.addField("Message content", message);
+    channel.send({embed});
+  });
+  client.on('messageUpdate', (oldMessage, newMessage) => {
+    if (oldMessage.channel.guild.id != "537101504864190464") return;
+    if (oldMessage == newMessage) return;
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    let embed = new Discord.RichEmbed();
+    embed.setTitle(":wastebasket:");
+    embed.setColor('orange');
+    embed.setDescription('Message by ' + oldMessage.author.tag + ' edited on ' + new Date());
+    embed.addField("Old Message", oldMessage);
+    embed.addField("New Message", newMessage);
+    channel.send({embed});    
   });
 function resetBot(channel) {
     process.exit(0)
   }
-client.login(config.token);
+//client.login(config.token);
+client.login("NDY3MDEwNTU2ODAxNDQ5OTg1.D0ya1w.A_zX34ED1QYP2rWofinMl4W6gwI");
