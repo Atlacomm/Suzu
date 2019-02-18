@@ -64,12 +64,11 @@ client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   let channel = client.channels.find(ch => ch.id === '537119674828324890');
   let embed = new Discord.RichEmbed(); 
-  var round = Math.round(client.ping);  
   try{  
   embed.setTitle("ONLINE");
     embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
     embed.setColor(0x16ff00);
-    embed.addField('Client Ping', `The client took **${round}ms** to respond.`);
+    embed.addField('Client Ping', `The client took **${Math.round(client.ping)}ms** to respond.`);
     embed.setFooter("Use suzu:help to see all of my commands");
     channel.send({embed});
   } catch (error) {
@@ -266,13 +265,14 @@ client.on('guildMemberAdd', member => {
   client.on('messageUpdate', (oldMessage, newMessage) => {
     if (oldMessage.channel.guild.id != "537101504864190464") return;
     if (oldMessage == newMessage) return;
+    if (newMEssage == oldMessage) return;
     let channel = client.channels.find(ch => ch.id === '539142431552176139');
     let embed = new Discord.RichEmbed();
     embed.setTitle(":wastebasket:");
     embed.setColor('orange');
     embed.setDescription('Message by ' + oldMessage.author.tag + ' edited on ' + new Date());
-    embed.addField("Old Message", oldMessage);
-    embed.addField("New Message", newMessage);
+    embed.addField("Old Message", oldMessage + " ");
+    embed.addField("New Message", newMessage + " ");
     channel.send({embed});    
   });
 function resetBot(channel) {
