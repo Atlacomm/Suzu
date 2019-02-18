@@ -63,16 +63,14 @@ const activities_list = [
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   let channel = client.channels.find(ch => ch.id === '537119674828324890');
-  let embed = new Discord.RichEmbed();   
-
-
+  let embed = new Discord.RichEmbed(); 
+  let round = Math.round(client.ping)  
     embed.setTitle("ONLINE");
     embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
     embed.setColor(0x16ff00);
-    embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
+    embed.addField('Client Ping', `The client took  ${round} ms to respond.` );
     embed.setFooter("Use suzu:help to see all of my commands");
     channel.send({embed});
-    
   })
   
   
@@ -95,7 +93,7 @@ client.on('message', msg=> {
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");
     embed.setColor(0x16ff00);
-    embed.setDescription("It took me **" + Math.round(client.ping) + " ms** to respond.")
+    embed.setDescription(`It took me **  ${Math.round(client.ping)} ms ** to respond.`)
     embed.setFooter("use suzu:help to see all of my commands");
     msg.channel.send({embed});
   }
@@ -130,6 +128,10 @@ client.on('message', msg=> {
       msg.channel.send({embed});     
     }
   } else if (msg.content.startsWith (prefix + 'nuke')){
+    if (!msg.member.hasPermission("BAN_MEMBERS")){
+      msg.reply("Hold up! You aren't allowed to nuke messages!");
+      return;
+    }
     msg.channel.send(":radioactive: Nuking Channel...");
     msg.channel.bulkDelete(99, true);
     msg.channel.send(":radioactive: Nuked Channel.");
