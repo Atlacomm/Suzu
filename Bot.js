@@ -263,9 +263,10 @@ client.on('guildMemberAdd', member => {
     channel.send({embed});
   });
   client.on('messageUpdate', (oldMessage, newMessage) => {
+    try{
     if (oldMessage.channel.guild.id != "537101504864190464") return;
     if (oldMessage == newMessage) return;
-    if (newMEssage == oldMessage) return;
+    if (newMessage == oldMessage) return;
     let channel = client.channels.find(ch => ch.id === '539142431552176139');
     let embed = new Discord.RichEmbed();
     embed.setTitle(":wastebasket:");
@@ -273,7 +274,10 @@ client.on('guildMemberAdd', member => {
     embed.setDescription('Message by ' + oldMessage.author.tag + ' edited on ' + new Date());
     embed.addField("Old Message", oldMessage + " ");
     embed.addField("New Message", newMessage + " ");
-    channel.send({embed});    
+    channel.send({embed});  
+    } catch (error) {
+      console.error(error);
+    }  
   });
 function resetBot(channel) {
     process.exit(0)
