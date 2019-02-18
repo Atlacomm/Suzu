@@ -50,7 +50,7 @@ const activities_list = [
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  let channel = client.channels.find(ch => ch.name === 'bot');
+  let channel = client.channels.find(ch => ch.id === '537119674828324890');
   let embed = new Discord.RichEmbed();
     embed.setTitle("ONLINE");
     embed.setColor(0xfffd00);
