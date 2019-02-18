@@ -50,6 +50,20 @@ const activities_list = [
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  let channel = client.channels.find(ch => ch.name === 'bot');
+  let embed = new Discord.RichEmbed();
+    embed.setTitle("ONLINE");
+    embed.setColor(0xfffd00);
+    embed.addField('BOT RESET SUCCESSFULLY', 'SUZU IS NOW ONLINE. if the bot was not told to reset please contact **Rest in peace, Opportunity.#9105** immediately as this message is now unsolicited and needs to be addressed as soon as possible, for it could be due to a crash.');
+    embed.setFooter("Now running post startup commands...");
+    channel.send({embed})
+  var round =Math.round(client.ping); 
+  let secondembed = new Discord.RichEmbed();
+    secondembed.setTitle("Client Ping");
+    secondembed.setColor(0x16ff00);
+    secondembed.addField("ping", "it took me " + round + " ms to respond, you may now use me as you normally would")
+    secondembed.setFooter("use suzu:help to see all of my commands");
+    channel.send({secondembed});
   setInterval(() => 
   {
     const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
@@ -153,7 +167,16 @@ client.on('message', msg => {
       msg.reply("Hold up! You aren't Ree!:thinking:");
       return;
     }
-    resetBot(msg.channel);
+    console.log('RESETTING BOT')
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("RESET");
+    embed.setColor(0xff0000);
+    embed.addField('NOW RESETTING SUZU', 'REBOOTING');
+    embed.setFooter("CLIENT MAY TAKE A WHILE TO COME BACK ONLINE");
+    msg.channel.send({embed})
+    setTimeout(function(){ 
+      resetBot(); 
+    }, 3000);
   }
   else if(msg.content.startsWith(prefix)){
     msg.reply('this is an unknown command:cold_sweat:, you can use `suzu:help` for more information on what my commands are.')
@@ -172,14 +195,7 @@ client.on('guildMemberAdd', member => {
     
   });
 function resetBot(channel) {
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("RESET");
-    embed.setColor(0xff0000);
-    embed.addField('NOW RESETTING SUZU', 'REBOOTING');
-    embed.setFooter("CLIENT MAY TAKE A WHILE TO COME BACK ONLINE");
-    channel.send({embed})
-    .then(msg => client.destroy())
-    .then(() => client.login(config.token));
+    process.exit(0)
   }
 
 
