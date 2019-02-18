@@ -71,34 +71,14 @@ client.on('ready', async () => {
     embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
     
 
-    embed.setFooter("running startup commands in 6 seconds");
+    embed.setFooter("running startup commands...");
     let msg = await channel.send({embed})
     setTimeout(() => {
-        embed.setFooter("running startup commands in 5 seconds");
-        msg.edit({embed});
-    }, 1000)
-    setTimeout(() => {
-      embed.setFooter("running startup commands in 4 seconds");
-      msg.edit({embed});
-    }, 2000)
-    setTimeout(() => {
-      embed.setFooter("running startup commands in 3 seconds");
-     msg.edit({embed});
-    }, 3000)
-    setTimeout(() => {
-      embed.setFooter("running startup commands in 2 seconds");
-     msg.edit({embed});
-    }, 4000)
-    setTimeout(() => {
-      embed.setFooter("running startup commands in 1 second.");
-     msg.edit({embed});
-    }, 5000)
-    setTimeout(() => {
       var round =Math.round(client.ping);
-        embed.setColor(0x16ff00);
-        embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
-        embed.setFooter("Use suzu:help to see all of my commands");
-        msg.edit({embed});
+      embed.setColor(0x16ff00);
+      embed.addField('Client Ping', 'The client took ' + round + 'ms to respond.' )
+      embed.setFooter("Use suzu:help to see all of my commands");
+      msg.edit({embed});
     }, 6000).catch(err => {
       console.log("on ready event error");
       console.error(err);
