@@ -64,13 +64,17 @@ client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   let channel = client.channels.find(ch => ch.id === '537119674828324890');
   let embed = new Discord.RichEmbed(); 
-  let round = Math.round(client.ping)  
-    embed.setTitle("ONLINE");
+  var round = Math.round(client.ping);  
+  try{  
+  embed.setTitle("ONLINE");
     embed.addField('Suzu is now online', 'The bot has started. This may be due to a crash or an owner calling the reset function.');
     embed.setColor(0x16ff00);
-    embed.addField('Client Ping', `The client took  ${round} ms to respond.` );
+    embed.addField('Client Ping', `The client took **${round}ms** to respond.`);
     embed.setFooter("Use suzu:help to see all of my commands");
     channel.send({embed});
+  } catch (error) {
+    console.error(error);
+  }
   })
   
   
@@ -87,13 +91,14 @@ client.on('ready', async () => {
 
 
 client.on('message', msg=> {
+  try{
   if (!msg.guild) return;
   if (msg.content === prefix + 'ping') {
     console.log(client.ping);
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");
     embed.setColor(0x16ff00);
-    embed.setDescription(`It took me **  ${Math.round(client.ping)} ms ** to respond.`)
+    embed.setDescription(`It took me **  ${Math.round(client.ping)} ms ** to respond.`);
     embed.setFooter("use suzu:help to see all of my commands");
     msg.channel.send({embed});
   }
@@ -211,6 +216,9 @@ client.on('message', msg=> {
     embed.setDescription('Please use **suzu:help** to see all available commands.')
     msg.channel.send({embed})
   }
+} catch (error) {
+  console.error(error)
+}
 });
 
 
