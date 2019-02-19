@@ -1,0 +1,24 @@
+{
+  "name": "suzu",
+  "version": "1.0.0",
+  "description": "Developed by Christian (Rest in peace, Opportunity.#9105) and Nayab (ServerLion#1789)\r please do not clone this software and market it as your own, thanks again.",
+  "main": "Bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjthomp2005/Suzu.git"
+  },
+  "author": "Ree, ServerLion and Alee",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cjthomp2005/Suzu/issues"
+  },
+  "homepage": "https://github.com/cjthomp2005/Suzu#readme",
+  "dependencies": {
+    "colors": "^1.3.3",
+    "discord.js": "^11.4.2",
+    "fs": "0.0.1-security"
+  }
+}

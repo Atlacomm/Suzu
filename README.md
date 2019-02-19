@@ -2,5 +2,7 @@
 ## Suzu is a multipurpose bot for the Hovercraft Dodge! discord server.
 
 Developed by Christian (Rest in peace, Opportunity.#9105) and Nayab (ServerLion#1789)
-please do not clone this software and market it as your own, thanks again.
 
+Command handler and bot improvments by Alee (Command handler originally by jtsshieh)
+
+This code is licensed under GPL 3.0
