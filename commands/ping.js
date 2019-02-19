@@ -18,6 +18,7 @@
  *
  * *************************************/
 module.exports.run = async (client, msg) => {
+  const Discord = require('discord.js');
     console.log(client.ping);
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");

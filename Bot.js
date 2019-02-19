@@ -21,10 +21,10 @@ const Discord = require('discord.js');
 const colors = require("colors");
 const fs = require("fs");
 const config = require ("./config.json");
+const settings = require ("./settings.json");
 const client = new Discord.Client();
-const prefix = ("suzu:");
 const activities_list = [
-  "with the "+prefix+"help command.", 
+  "with the "+settings.prefix+"help command.", 
   "Hovercar Dodge!",
   "with Unity prefabs", 
   "with JavaScript",
@@ -117,7 +117,7 @@ fs.readdir('./commands', (err, files) => {
     embed.setTitle("Bot is online");
     embed.addField('Suzu is now starting up', 'The bot has started. This may be due to a crash or an owner calling the reset function. please wait for the inicator to turn green before sending any commands, just incase.');
     embed.setColor(0xfff400);
-    embed.setFooter("Use " + prefix + "help to see all of my commands");
+    embed.setFooter("Use " + settings.prefix + "help to see all of my commands");
     let msg = await channel.send({embed})
     setTimeout(() => {
       var round = Math.round(client.ping);
@@ -147,8 +147,8 @@ fs.readdir('./commands', (err, files) => {
 client.on('message', msg => {
   if (msg.author.bot) return;
   if (!msg.guild) return;
-  if (!msg.content.startsWith(prefix)) return;
-  const args = msg.content.slice(prefix.length).trim().split(/ +/g);
+  if (!msg.content.startsWith(settings.prefix)) return;
+  const args = msg.content.slice(settings.prefix.length).trim().split(/ +/g);
   const command = args.shift();
   let cmd;
 
@@ -180,11 +180,11 @@ client.on('message', msg => {
   if(msg.content.startsWith('y\'all')){
     msg.reply('I can see you are a southerner as well')
   }
-  else if(msg.content.startsWith(prefix) == null){
+  else if(msg.content.startsWith(settings.prefix) == null){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Unknown Command");
     embed.setColor(0xff0000);
-    embed.setDescription('Please use **'+prefix+'help** to see all available commands. some commands may not be available to you depending on your role.')
+    embed.setDescription('Please use **'+settings.prefix+'help** to see all available commands. some commands may not be available to you depending on your role.')
     msg.channel.send({embed})
   }
 } catch (error) {
@@ -199,7 +199,7 @@ client.on('guildMemberAdd', member => {
     embed.setTitle("New Member!");
     embed.setColor(0x16ff00);
     embed.setDescription('Welcome to the server, ' + member.user.username);
-    embed.setFooter("Use "+prefix+"help to see all of my commands");
+    embed.setFooter("Use "+settings.prefix+"help to see all of my commands");
     channel.send({embed});
     if (member.guild.id != "537101504864190464") return;
     channel = client.channels.find(ch => ch.id === '539142431552176139');
