@@ -22,7 +22,7 @@ const colors = require("colors");
 const fs = require("fs");
 const config = require ("./config.json");
 const client = new Discord.Client();
-const prefix = ("abb:");
+const prefix = ("suzu:");
 const activities_list = [
   "with the "+prefix+"help command.", 
   "Hovercar Dodge!",
