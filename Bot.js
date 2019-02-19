@@ -1,13 +1,30 @@
 /* 
-Suzu! A bot for the Hovercar Dodge! server
-Designed and Programed by Ree (but serverlion and cylex helped me because my programming is gei)
+    Suzu! A bot for the Hovercar Dodge! server
+    Copyright (C) 2019 Designed and Programed by Ree and ServerLion
+
+    Bot improvments by Alee
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 const Discord = require('discord.js');
+const colors = require("colors");
+const fs = require("fs");
 const config = require ("./config.json");
 const client = new Discord.Client();
-const prefix = ("suzu:");
+const prefix = ("abb:");
 const activities_list = [
-  "with the suzu:help command.", 
+  "with the "+prefix+"help command.", 
   "Hovercar Dodge!",
   "with Unity prefabs", 
   "with JavaScript",
@@ -59,27 +76,59 @@ const activities_list = [
   "OwO",
   "with shit im not supposed to play with"
   ]; // creates an arraylist containing phrases you want your bot to switch through.
+  
+  console.log(`Suzu: Copyright (C) 2019 Designed and Programed by Ree and ServerLion`.gray);
+  console.log('This program comes with ABSOLUTELY NO WARRANTY; for details type `show w\'.'.gray);
+  console.log ('This is free software, and you are welcome to redistribute it'.gray);
+  console.log ('under certain conditions; type `show c\' for details.\n'.gray)
 
-client.on('ready', async () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+// Command Handler by jtsshieh and modified by Alee
+
+client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
+
+fs.readdir('./commands', (err, files) => {
+  if (err) console.error(err);
+  console.log(`Loading a total of ${files.length} commands into the memory.`.cyan);
+  files.forEach(file => {
+    try {
+      const command = require(`./commands/${file}`);
+      console.log(`Attempting to load the command "${command.help.name}".`.cyan);
+      client.commands.set(command.help.name, command);
+      command.conf.aliases.forEach(alias => {
+        client.aliases.set(alias, command.help.name);
+        console.log(`Attempting to load "${alias}" as an alias for "${command.help.name}"`.cyan);
+      });
+    }
+    catch (err) {
+      console.log('An error has occured trying to load a command. Here is the error.'.red);
+      console.log(err.stack);
+    }
+  });
+  console.log('Command Loading complete!'.green);
+});
+
+  client.on('ready', async () => {
+  console.log(`Logged in as ${client.user.tag}!`.green);
   let channel = client.channels.find(ch => ch.id === '539142431552176139');
   let embed = new Discord.RichEmbed(); 
   
   try{  
-    embed.setTitle("ONLINE");
+    embed.setTitle("Bot is online");
     embed.addField('Suzu is now starting up', 'The bot has started. This may be due to a crash or an owner calling the reset function. please wait for the inicator to turn green before sending any commands, just incase.');
     embed.setColor(0xfff400);
-    embed.setFooter("Use suzu:help to see all of my commands");
+    embed.setFooter("Use " + prefix + "help to see all of my commands");
     let msg = await channel.send({embed})
     setTimeout(() => {
-      var round =Math.round(client.ping);
+      var round = Math.round(client.ping);
         embed.setColor(0x16ff00);
-        embed.addField('Client Ping', ':signal_strength: the client took ' + round + 'ms to respond.' )
+        embed.addField('Client Ping', ':signal_strength: The client took ' + round + 'ms to respond.' )
         msg.edit({embed});
+      console.log(`Bot is ready!`.green);
     }, 3000);
     
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
   })
   
@@ -95,139 +144,51 @@ client.on('ready', async () => {
   
 });
 
-
-client.on('message', msg=> {
-  try{
+client.on('message', msg => {
+  if (msg.author.bot) return;
   if (!msg.guild) return;
-  if (msg.content === prefix + 'ping') {
-    console.log(client.ping);
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("Client Ping");
-    embed.setColor(0x16ff00);
-    embed.setDescription(":signal_strength: It took me **  ${Math.round(client.ping)} ms ** to respond.");
-    embed.setFooter("use suzu:help to see all of my commands");
-    msg.channel.send({embed});
+  if (!msg.content.startsWith(prefix)) return;
+  const args = msg.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift();
+  let cmd;
+
+  if (client.commands.has(command)) {
+    cmd = client.commands.get(command);
+  } else if (client.aliases.has(command)) {
+    cmd = client.commands.get(client.aliases.get(command));
   }
-  else if (msg.content === prefix + 'help'){
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("Help for Suzu");
-    embed.setColor(0x16ff00);
-    embed.addField("Commands", "ping\npic")
-    if (msg.member.hasPermission("KICK_MEMBERS")){ embed.addField("Moderation", "\nkick\nban\nnuke")}
-    if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689"){embed.addField("Bot Managment", "\nRESET")}
-    embed.setFooter("Developed by Ree and ServerLion.");
-    msg.channel.send({embed});
-  } else if (msg.content.startsWith (prefix + 'pic')){
-    let user = msg.mentions.users.first();
-      if (user) {
-        const member = msg.guild.member(user);
-        if (member) {
-          let embed = new Discord.RichEmbed();
-          embed.setTitle("Profile Picture");
-          embed.setColor(0x16ff00);
-          embed.setImage(user.avatarURL);
-          embed.setFooter("use suzu:help to see all of my commands");
-          msg.channel.send({embed});   
-       }
-    }else{
-      let embed = new Discord.RichEmbed();
-      embed.setTitle("Profile Picture");
-      embed.setColor(0x16ff00);
-      embed.setDescription("I must say, you look flattering! :stuck_out_tongue_winking_eye:")
-      embed.setImage(msg.author.avatarURL);
-      embed.setFooter("use suzu:help to see all of my commands");
-      msg.channel.send({embed});     
-    }
-  } else if (msg.content.startsWith (prefix + 'nuke')){
-    if (!msg.member.hasPermission("BAN_MEMBERS")){
-      msg.reply("Hold up! You aren't allowed to nuke messages!");
-      return;
-    }
-    msg.channel.send(":radioactive: Nuking Channel...");
-    msg.channel.bulkDelete(99, true);
-    msg.channel.send(":radioactive: Nuked Channel.");
-  } else if (msg.content.startsWith (prefix + 'kick')){
-    if (!msg.member.hasPermission("KICK_MEMBERS")){
-      msg.reply("Hold up! You aren't allowed to kick members!");
-      return;
-    }
-    let user = msg.mentions.users.first();
-      const member = msg.guild.member(user);
-      if (member) {
-        member.kick('Kicked by ' + msg.author.username + ' using Suzu.').then(() => {
-          msg.reply(`Successfully kicked ${user.tag}`);
-        }).catch(err => {
-          msg.reply('I was unable to kick the member');
-          console.error(err);
-        });
-    }
-  } else if (msg.content.startsWith(prefix + 'ban')) {
-    if (!msg.member.hasPermission("BAN_MEMBERS")){
-      msg.reply("Hold up! You aren't allowed to ban members!");
-      return;
-    }
-    let user = msg.mentions.users.first();
-    if (user) {
-      const member = msg.guild.member(user);
-      if (member) {
-        member.ban({
-          reason: 'Banned by ' + msg.author.username + ' using Suzu.',
-        }).then(() => {
-          msg.reply(`Successfully banned ${user.tag}`);
-        }).catch(err => {
-          msg.reply('I was unable to ban the member');
-          console.error(err);
-        });
-      } else {
-        msg.reply('That user isn\'t in this guild!');
+
+  if (cmd) {
+    if (cmd.conf.guildOnly == true) {
+      if (!msg.channel.guild) {
+        return msg.channel.createMessage('This command can only be ran in a guild.');
       }
-    } else {
-      msg.reply('You didn\'t mention the user to ban!');
+    }
+    try {
+      cmd.run(client, msg, args);
+    }
+    catch (e) {
+      console.error(e);
     }
   }
-  else if(msg.content === prefix + 'RESET'){
-    if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689"){ 
-      let channel = client.channels.find(ch => ch.id === '539142431552176139');
-      console.log('Restarting...')
-      let embed = new Discord.RichEmbed();
-      embed.setTitle("RESET");
-      embed.setColor(0xff0000);
-      embed.setDescription('Suzu will now restart.');
-      embed.setFooter("This may take a while...");
-      channel.send({embed})
-      setTimeout(function(){ 
-        resetBot(); 
-      }, 3000);
-    } else {
-      msg.reply("Hold up! You aren't a dev! :thinking:");
-      return;
-    }
-  }
-  else if(msg.content === prefix + 'about'){
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("About Bot");
-    embed.setColor(0x16ff00);
-    embed.setDescription('Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server')
-    embed.addField("Developers", "Rest in peace, Opportunity.#9105\nServerLion#1789");
-    embed.addField("Links", "[Github](https://github.com/cjthomp2005/Suzu)\n[Discord](https://discord.gg/t9JTUb)");
-    embed.setFooter("Use suzu:help to see all of my commands");
-    msg.channel.send({embed})
-  }
-  else if(msg.content === prefix + 'yell at cylex'){
+
+  try{
+
+  if(msg.content === 'Yell at cylex'){
     msg.channel.send("cylex, nobody cares about the caps lock.")
   }
-  else if(msg.content.startsWith(prefix + 'y\'all')){
+  if(msg.content.startsWith('y\'all')){
     msg.reply('I can see you are a southerner as well')
   }
-  else if(msg.content.startsWith(prefix)){
+  else if(msg.content.startsWith(prefix) == null){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Unknown Command");
     embed.setColor(0xff0000);
-    embed.setDescription('Please use **suzu:help** to see all available commands. some commands may not be available to you depending on your role.')
+    embed.setDescription('Please use **'+prefix+'help** to see all available commands. some commands may not be available to you depending on your role.')
     msg.channel.send({embed})
   }
 } catch (error) {
-  console.error(error)
+  console.log(error)
 }
 });
 
@@ -238,7 +199,7 @@ client.on('guildMemberAdd', member => {
     embed.setTitle("New Member!");
     embed.setColor(0x16ff00);
     embed.setDescription('Welcome to the server, ' + member.user.username);
-    embed.setFooter("use suzu:help to see all of my commands");
+    embed.setFooter("Use "+prefix+"help to see all of my commands");
     channel.send({embed});
     if (member.guild.id != "537101504864190464") return;
     channel = client.channels.find(ch => ch.id === '539142431552176139');
@@ -283,14 +244,14 @@ client.on('guildMemberAdd', member => {
     embed.setTitle(":pencil: Message Edit");
     embed.setColor(0xFF4500);
     embed.setDescription('Message by ' + oldMessage.author.username + ' edited on ' + new Date());
-    embed.addField("Old Message", oldMessage + " ");
-    embed.addField("New Message", newMessage + " ");
+    embed.addField("Old Message", oldMessage);
+    embed.addField("New Message", newMessage);
     channel.send({embed});  
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }  
   });
-function resetBot(channel) {
-    process.exit(0)
-  }
-client.login(config.token);
+client.login(config.token).catch(function() {
+  console.log('Login failed. The token that you put in is invalid, please put in a new one...'.red);
+  process.exit(0);
+});
