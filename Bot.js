@@ -20,7 +20,8 @@
 const Discord = require('discord.js');
 const colors = require("colors");
 const fs = require("fs");
-const config = require ("./config.json");
+//const config = require ("./config.json");
+const token = process.env.token;
 const settings = require ("./settings.json");
 const client = new Discord.Client();
 const activities_list = [
@@ -260,7 +261,7 @@ client.on('guildMemberAdd', member => {
       console.log(error)
     }  
   });
-client.login(config.token).catch(function() {
+client.login(token).catch(function() {
   console.log('Login failed. The token that you put in is invalid, please put in a new one...'.red);
   process.exit(0);
 });
