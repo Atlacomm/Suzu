@@ -4,7 +4,7 @@
   "description": "Developed by Christian (Rest in peace, Opportunity.#9105) and Nayab (ServerLion#1789)\r please do not clone this software and market it as your own, thanks again.",
   "main": "Bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node Bot.js"
   },
   "repository": {
     "type": "git",
