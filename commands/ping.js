@@ -23,7 +23,7 @@ module.exports.run = async (client, msg) => {
     let embed = new Discord.RichEmbed();
     embed.setTitle("Client Ping");
     embed.setColor(0x16ff00);
-    embed.setDescription(":signal_strength: It took me **  ${Math.round(client.ping)} ms ** to respond.");
+    embed.setDescription(`:signal_strength: It took me **${Math.round(client.ping)}ms** to respond.`);
     embed.setFooter("Use "+ require('../settings.json').prefix +"help to see all of my commands");
     msg.channel.send({embed});
 };

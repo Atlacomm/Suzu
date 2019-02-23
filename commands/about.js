@@ -1,6 +1,6 @@
 /****************************************
  *
- *   About: Command for Suzu
+ *   Balance: Command for Suzu
  *   Copyright (C) 2019 Designed and Programed by Ree and ServerLion
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -18,18 +18,18 @@
  *
  * *************************************/
 module.exports.run = async (client, msg) => {
-    const Discord = require('discord.js');
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("About Bot");
-    embed.setColor(0x16ff00);
-    embed.setDescription('Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server')
-    embed.addField("Developers", "Rest in peace, Opportunity.#9105\nServerLion#1789\nAlee#0014");
-    embed.addField("Links", "[Github](https://github.com/cjthomp2005/Suzu)\n[Discord](https://discord.gg/t9JTUb)");
-    embed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands");
-    msg.channel.send({embed})
+  const Discord = require('discord.js');
+  let embed = new Discord.RichEmbed();
+  embed.setTitle("About Bot");
+  embed.setColor(0x16ff00);
+  embed.setDescription('Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server')
+  embed.addField("IMPORTANT:", "this is a development build, it may not be stable.")
+  embed.addField("Developers", "Rest in peace, Opportunity.#9105\nServerLion#1789\nAlee#0014");
+  embed.addField("Links", "[Github](https://github.com/cjthomp2005/Suzu)\n[Discord](https://discord.gg/t9JTUb)");
+  embed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands");
+  msg.channel.send({embed})
 
 };
-
 exports.conf = {
   aliases: [],
   guildOnly: true,

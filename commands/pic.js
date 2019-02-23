@@ -48,6 +48,6 @@ exports.conf = {
 exports.help = {
   name: 'pic',
   description: 'The pic command',
-  usage: 'pic',
+  usage: 'pic <mention>',
   category: '- Utility Commands',
 };
