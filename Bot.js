@@ -180,6 +180,14 @@ client.on('message', msg => {
   if(msg.content.startsWith('y\'all')){
     msg.reply('I can see you are a southerner as well')
   }
+  if(!coins[msg.author.id]){
+    coins[msg.author.id] = {
+      coins: 0
+    };
+  }
+
+  
+
   else if(msg.content.startsWith(settings.prefix) == null){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Unknown Command");
@@ -190,6 +198,7 @@ client.on('message', msg => {
 } catch (error) {
   console.log(error)
 }
+
 });
 
 
