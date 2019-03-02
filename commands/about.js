@@ -22,9 +22,9 @@ module.exports.run = async (client, msg) => {
   let embed = new Discord.RichEmbed();
   embed.setTitle("About Bot");
   embed.setColor(0x16ff00);
-  embed.setDescription('Suzu is a multi purpose bot designed to function in the Hovercar Dodge discord server')
+  embed.setDescription('Suzu is a multi purpose bot designed to function in the Thompson Developer Studios discord server')
   embed.addField("IMPORTANT:", "this is a development build, it may not be stable.")
-  embed.addField("Developers", "Rest in peace, Opportunity.#9105\nServerLion#1789\nAlee#0014");
+  embed.addField("Developers", "Swingin30#9105\nServerLion#1789\nAlee#0014");
   embed.addField("Links", "[Github](https://github.com/cjthomp2005/Suzu)\n[Discord](https://discord.gg/t9JTUb)");
   embed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands");
   msg.channel.send({embed})

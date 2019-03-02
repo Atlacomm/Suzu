@@ -35,7 +35,7 @@ module.exports.run = async (client, message) => {
     .setAuthor(`Suzu Help and on ${client.guilds.size} servers`, client.user.avatarURL)
     .setDescription('Every command you input into Suzu is `' + require('../settings.json').prefix + '`')
     .setColor(0x16ff00)
-    .setFooter('Designed and Programed by Ree and ServerLion Copyright 2019, Licensed with GPL-3.0');
+    .setFooter('Designed and Programed by Swingin30, Alee and ServerLion Copyright 2019, Licensed with GPL-3.0');
 
   categories.forEach(function(x) {
     let cat = '';

@@ -1,6 +1,6 @@
 /****************************************
  *
- *   Nuke: Command for Suzu
+ *   Ping: Command for Suzu
  *   Copyright (C) 2019 Designed and Programed by Ree and ServerLion
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -18,13 +18,7 @@
  *
  * *************************************/
 module.exports.run = async (client, msg) => {
-    if (!msg.member.hasPermission("BAN_MEMBERS")){
-        msg.reply("Hold up! You aren't allowed to nuke messages!");
-        return;
-      }
-      msg.channel.send(":radioactive: incoming!");
-      msg.channel.bulkDelete(99, true);
-      msg.channel.send(":radioactive: Nuked Channel.");
+    msg.author.send("test :)")
 };
 
 exports.conf = {
@@ -32,8 +26,8 @@ exports.conf = {
   guildOnly: true,
 };
 exports.help = {
-  name: 'nuke',
-  description: 'The nuke command',
-  usage: 'nuke',
-  category: '- Moderation Commands',
+  name: 'test',
+  description: 'The ping command',
+  usage: 'test',
+  category: '- Temporary',
 };
