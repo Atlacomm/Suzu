@@ -21,18 +21,25 @@ module.exports.run = async (client, msg) => {
     const Discord = require('discord.js');
     if (msg.author.id == "472923135965003786" || msg.author.id == "299314446428274689" || msg.author.id == "242775871059001344"){ 
         let channel = client.channels.find(ch => ch.id === '539142431552176139');
-        msg.reply("Suzu is now powering off...")
-        console.log('Powering off...')
+        msg.reply("Suzu is now powering off...");
+        console.log('Powering off...');
         let embed = new Discord.RichEmbed();
         embed.setTitle("Powering off...");
         embed.setColor(0xff0000);
         embed.setDescription('Suzu will now poweroff.');
+        embed.setThumbnail('https://media.giphy.com/media/12zgfBTa1weBvoGGNn/giphy.gif');
         embed.setFooter("This may take a while...");
-        channel.send({embed})
+        let reply = await channel.send({embed})
         client.user.setStatus('invisible');
-        setTimeout(function(){ 
-          process.exit(0);
+        setTimeout(() =>{
+          embed.setThumbnail("https://cdn.discordapp.com/attachments/547952873355476992/547958234812514305/done.png");
+          embed.setDescription("suzu has powered off!");
+          embed.setFooter("done!");
+          reply.edit({embed})
         }, 3000);
+        setTimeout(() =>{
+          process.exit(0);
+        }, 4000);
       } else {
         msg.reply("Hold up! You aren't a dev! :thinking:");
         return;
@@ -47,5 +54,5 @@ exports.help = {
   name: 'poweroff',
   description: 'The power off command',
   usage: 'poweroff',
-  category: '- Staff Commands',
+  category: '- DEV commands',
 };

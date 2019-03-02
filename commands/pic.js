@@ -20,25 +20,25 @@
 module.exports.run = async (client, msg) => {
     const Discord = require('discord.js');
     let user = msg.mentions.users.first();
-    if (user) {
-      const member = msg.guild.member(user);
-      if (member) {
-        let embed = new Discord.RichEmbed();
-        embed.setTitle("Profile Picture");
-        embed.setColor(0x16ff00);
-        embed.setImage(user.avatarURL);
-        embed.setFooter("Use "+prefix+"help to see all of my commands");
-        msg.channel.send({embed});   
-     }
-  }else{
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("Profile Picture");
-    embed.setColor(0x16ff00);
-    embed.setDescription("I must say, you look flattering! :stuck_out_tongue_winking_eye:")
-    embed.setImage(msg.author.avatarURL);
-    embed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands");
-    msg.channel.send({embed});     
-  }
+      if (user) {
+        const member = msg.guild.member(user);
+        if (member) {
+          let embed = new Discord.RichEmbed();
+          embed.setTitle("Profile Picture");
+          embed.setColor(0x16ff00);
+          embed.setImage(user.avatarURL);
+          embed.setFooter("use suzu:help to see all of my commands");
+          msg.channel.send({embed});   
+       }
+    }else{
+      let embed = new Discord.RichEmbed();
+      embed.setTitle("Profile Picture");
+      embed.setColor(0x16ff00);
+      embed.setDescription("I must say, you look flattering! :stuck_out_tongue_winking_eye:")
+      embed.setImage(msg.author.avatarURL);
+      embed.setFooter("use suzu:help to see all of my commands");
+      msg.channel.send({embed});     
+    }
 };
 
 exports.conf = {
@@ -48,6 +48,6 @@ exports.conf = {
 exports.help = {
   name: 'pic',
   description: 'The pic command',
-  usage: 'pic',
+  usage: 'pic <mention>',
   category: '- Utility Commands',
 };
