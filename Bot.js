@@ -115,24 +115,17 @@ fs.readdir('./commands', (err, files) => {
   
   try{  
     embed.setTitle("Bot is online");
-    embed.addField('SuzuBETA is now starting up', 'The bot has started. This may be due to a crash or an owner calling the reset function. please wait for the inicator to turn green before sending any commands, just incase.');
+    embed.addField('Suzu is now starting up', 'The bot has started. This may be due to a crash or an owner calling the reset function. please wait for the inicator to turn green before sending any commands, just incase.');
     embed.setColor(0xfff400);
-    embed.setThumbnail('https://media.giphy.com/media/12zgfBTa1weBvoGGNn/giphy.gif');
     embed.setFooter("Use " + settings.prefix + "help to see all of my commands");
     let msg = await channel.send({embed})
     setTimeout(() => {
       var round = Math.round(client.ping);
-        embed.setColor(0xfff400);
+        embed.setColor(0x16ff00);
         embed.addField('Client Ping', ':signal_strength: The client took ' + round + 'ms to respond.' )
         msg.edit({embed});
       console.log(`Bot is ready!`.green);
-    }, 6000);
-    setTimeout(() => {
-        embed.setColor(0x16ff00);
-        embed.setThumbnail("https://cdn.discordapp.com/attachments/547952873355476992/547958234812514305/done.png");
-        embed.addField('you may now use Suzu', `client successfully started on ${new Date()}`)
-        msg.edit({embed});
-    }, 9000);
+    }, 3000);
     
   } catch (error) {
     console.log(error);
@@ -187,6 +180,14 @@ client.on('message', msg => {
   if(msg.content.startsWith('y\'all')){
     msg.reply('I can see you are a southerner as well')
   }
+  if(!coins[msg.author.id]){
+    coins[msg.author.id] = {
+      coins: 0
+    };
+  }
+
+  
+
   else if(msg.content.startsWith(settings.prefix) == null){
     let embed = new Discord.RichEmbed();
     embed.setTitle("Unknown Command");
@@ -197,6 +198,7 @@ client.on('message', msg => {
 } catch (error) {
   console.log(error)
 }
+
 });
 
 
