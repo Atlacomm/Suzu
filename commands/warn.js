@@ -25,10 +25,10 @@ let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 
 
 module.exports.run = async (client, msg, args) => {
-   if(!msg.member.hasPermission("MANAGE_MEMBERS")) return msg.reply(":warning:insufficient permissions");
+   if(!msg.member.hasPermission("KICK_MEMBERS")) return msg.reply(":warning:insufficient permissions");
    let wUser = msg.guild.member(msg.mentions.users.first()) || msg.guild.members.get(args[0])
    if(!wUser) return msg.reply(":x:error, couldn't find the member.")
-   if(wUser.hasPermission("MANAGE_MEMBERS")) return msg.reply(":warning:insufficient permissions\nThis user is a moderator, and therefor is excempt from warns.");
+   if(wUser.hasPermission("KICK_MEMBERS")) return msg.reply(":warning:insufficient permissions\nThis user is a moderator, and therefor is excempt from warns.");
    let reason = args.join(" ").slice(22);
 
    if(!warns[wUser.id]) warns[wUser.id] = {
@@ -38,22 +38,31 @@ module.exports.run = async (client, msg, args) => {
    warns[wUser.id].warns++;
 
    fs.writeFile("./warnings.json", JSON.stringify(warns), (err) => {
-       console.log(err)
+       if (err) console.log(err);
    });
 
    let warnEmbed = new Discord.RichEmbed()
-   .setDescription("warns")
-   .setColor(0xffff00)
-   .addField("Warned user", `<@${wUser.tag}>`)
-   .addField("Warned in", msg.channel)
-   .addField("Warned on", new Date())
-   .addField("Number of warnings", warns[wUser.id].warns)
-   .addField("Reason", reason);
+   warnEmbed.setDescription("warns")
+   warnEmbed.setColor(0xffff00)
+   warnEmbed.addField("Warned user", `<@${wUser.tag}>`)
+   warnEmbed.addField("Warned in", `${msg.channel.name}`)
+   warnEmbed.addField("Warned on", `${new Date()}`)
+   warnEmbed.addField("Number of warnings", `${warns[wUser.id].warns}`)
+   warnEmbed.addField("Reason", `${reason}`);
 
    let garage = client.channels.find(ch => ch.id === '539142431552176139');
 
-   msg.channel.send({warnEmbed})
-   garage.send({warnEmbed});
+   msg.channel.send({warnEmbed}).catch(err => {
+    if (err) console.log(err);
+
+    })
+   garage.send({warnEmbed}).catch(err => {
+    if (err) console.log(err);
+
+    })
+   
+   
+   
 
    if(warns[wUser.id].warns == 3){
     let muterole = msg.guild.roles.find(`name`, "Muted");
@@ -61,26 +70,26 @@ module.exports.run = async (client, msg, args) => {
     
     let mutetime = "12h";
     await(wUser.addRole(muterole.id));
-    garage.send(`<@${wUser.tag}> has been tempmuted for ${mutetime}`);
+    garage.send(`<@${wUser.id}> has been tempmuted for ${mutetime}`);
 
     setTimeout(function(){
         wUser.removeRole(muterole.id)
-        garage.send(`<@${wUser.tag}> has been unmuted.`)
-    }, mutetime)
+        garage.send(`<@${wUser.if}> has been unmuted.`)
+    }, 43200000)
    }
 
    if(warns[wUser.id].warns == 4){
     let muterole = msg.guild.roles.find(`name`, "Muted");
     if(!muterole) return garage.send(":warning:failed to give a user the \"Muted\" role. please create a role called `Muted`, change the permissions of this role so that the user cannot send messages.")
     
-    let mutetime = "12h";
+    let mutetime = "24h";
     await(wUser.addRole(muterole.id));
     garage.send(`<@${wUser.tag}> has been tempmuted for ${mutetime}`);
 
     setTimeout(function(){
         wUser.removeRole(muterole.id)
         garage.send(`<@${wUser.tag}> has been unmuted.`)
-    }, mutetime)
+    }, 86400000)
    }
 
    if(warns[wUser.id].warns == 5){
