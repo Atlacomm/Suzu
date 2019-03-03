@@ -19,21 +19,16 @@
  * *************************************/
 module.exports.run = async (client, msg) => {
     const Discord = require('discord.js');
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("Bot functions");
+    msg.reply("please check your direct messages.");
+    let embed = new Discord.RichEmbed
+    embed.setTitle("Bot functions")
     embed.setColor(0xFFFF00);
-    embed.setDescription('a private message has been sent to you containing everything the bot does and what data it collects.')
+    embed.setDescription("you requested that I send all of my functions too you.")
+    embed.addField("moderation", "the bot collects to following information and alerts the moderation team\n-edited messages\n-deleted messages\n-name changes\n-times at which messages were edited or deleted\n-times at which members joined or leaved the server")
+    embed.addField("what can Suzu do?", "suzu can do many things, right now Suzu is able to\n-grab a users profile picture\n-find the client ping\n-restart itself\n-kick and ban people\n-nuke channels\n-read and write information for economy")
     embed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands. these commands can only be used in Servers and not DMs");
-    msg.channel.send({embed})
+    msg.author.send({embed});
     
-    let sembed = new Discord.RichEmbed
-    sembed.setTitle("Bot functions")
-    sembed.setColor(0xFFFF00);
-    sembed.setDescription("you requested that I send all of my functions too you.")
-    sembed.addField("moderation", "the bot collects to following information and alerts the moderation team\n-edited messages\n-deleted messages\n-name changes\n-times at which messages were edited or deleted\n-times at which members joined or leaved the server")
-    sembed.addField("what can Suzu do?", "suzu can do many things, right now Suzu is able to\n-grab a users profile picture\n-find the client ping\n-restart itself\n-kick and ban people\n-nuke channels\n-read and write information for economy")
-    sembed.setFooter("Use "+require('../settings.json').prefix+"help to see all of my commands. these commands can only be used in Servers and not DMs");
-    msg.author.send({sembed})
 };
 exports.conf = {
   aliases: ['f'],
