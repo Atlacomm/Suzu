@@ -30,7 +30,7 @@ module.exports.run = async (client, message) => {
     }
   });
 
-  if (!message.guild.member(client.user).hasPermission('EMBED_LINKS')) return message.reply('ERROR: AleeBot doesn\'t have the permission to send embed links please enable them to use the full help.');
+  if (!message.guild.member(client.user).hasPermission('EMBED_LINKS')) return message.reply('ERROR: Suzu doesn\'t have the permission to send embed links. Please enable them to use the full help.');
   const embed = new Discord.RichEmbed()
     .setAuthor(`Suzu Help and on ${client.guilds.size} servers`, client.user.avatarURL)
     .setDescription('Every command you input into Suzu is `' + require('../settings.json').prefix + '`')
