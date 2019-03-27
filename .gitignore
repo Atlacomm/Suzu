@@ -1,2 +1,6 @@
 node_modules
 config.json
+warnings.json
+settings.json
+coins.json
+coinconfig.json

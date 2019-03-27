@@ -1,5 +1,20 @@
-/* 
-    Suzu! A bot for the Hovercar Dodge! server
+/************************************************************************************************
+ * /////////////////////    |||               |||   /////////////////////   |||               |||
+ * |||                      |||               |||                     |||   |||               |||
+ * |||                      |||               |||                     |||   |||               |||
+ * |||                      |||               |||                     |||   |||               |||
+ * |||                      |||               |||                     |||   |||               |||
+ * |||                      |||               |||                     |||   |||               |||
+ * /////////////////////    |||               |||   /////////////////////   |||               |||
+ *                   |||    |||               |||   |||                     |||               |||
+ *                   |||    |||               |||   |||                     |||               |||
+ *                   |||    |||               |||   |||                     |||               |||
+ *                   |||    |||               |||   |||                     |||               |||
+ *                   |||    |||               |||   |||                     |||               |||
+ * /////////////////////    |||///////////////|||   /////////////////////   |||///////////////|||
+ * 
+ * 
+    Suzu! A bot for the Thomspson Dev Studios! server
     Copyright (C) 2019 Designed and Programed by Ree and ServerLion
 
     Bot improvments by Alee
@@ -23,6 +38,11 @@ const fs = require("fs");
 const config = require ("./config.json");
 const settings = require ("./settings.json");
 const client = new Discord.Client();
+let coins = require("./coins.json");
+let coinconfig = require("./coinconfig.json");
+//coinchannelsettings.json
+global.servers = {};
+
 const activities_list = [
   "with the "+settings.prefix+"help command.", 
   "Hovercar Dodge!",
@@ -74,7 +94,33 @@ const activities_list = [
   "uwu",
   "uwo",
   "OwO",
-  "with shit im not supposed to play with"
+  "with shit im not supposed to play with",
+  "AstralMod is best fren",
+  "aStRaL mOd cAlM dOwN",
+  "bug fixes and performance improvements",
+  "with some string",
+  "now playing now playing",
+  "shift shaft",
+  "google chrome",
+  "the game where you find child prodigies on youtube and watch them for an hour, then you suddenly look at your instrument and realize you cant play so you just stand there crying",
+  "U P T I M E",
+  "AstroQueer",
+  "my hair is blue",
+  "the cha cha slide",
+  "youtube copystrikes",
+  "bE gEnTlE",
+  "shrimbot i love you but im better.",
+  "its 3 am and i dont know what to do",
+  "get out of my room mom im playing minecraft",
+  "music (no really i can play music)",
+  "i get 30 updates a day",
+  "SHRIMPBOAT",
+  "\"serverlion\"",
+  "australia isnt real",
+  "why am i here",
+  "HP hElP cEnTeR",
+  "with my owners BIOS settings",
+  "with a pen"
   ]; // creates an arraylist containing phrases you want your bot to switch through.
   
   console.log(`Suzu: Copyright (C) 2019 Designed and Programed by Ree and ServerLion`.gray);
@@ -133,12 +179,43 @@ fs.readdir('./commands', (err, files) => {
         embed.addField('you may now use Suzu', `client successfully started on ${new Date()}`)
         msg.edit({embed});
     }, 9000);
+    //TODO: UINFO
+    //TODO: LOGGING
+    //TODO: TIMERS
+    //TODO: NOTE TAKING
+
+
+
     
   } catch (error) {
     console.log(error);
   }
   })
   
+  setInterval(() => 
+  {
+    uptime = client.uptime;
+    var seconds = Math.round(uptime / 1000)
+    var minutes = 0
+    var hours = 0
+    var days = 0
+    
+    while(seconds >= 60){
+      seconds -= 60
+      minutes += 1
+    }
+    while(minutes >= 60){
+      minutes -= 60
+      hours += 1
+    }
+    while(hours >= 24){
+      hours -= 24
+      days += 1
+    }
+    let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    channel.setTopic(`uptime: ${days}/${hours}/${minutes}`)
+    .catch(console.error);
+  }, 120000);
   
   setInterval(() => 
   {
@@ -154,6 +231,47 @@ fs.readdir('./commands', (err, files) => {
 client.on('message', msg => {
   if (msg.author.bot) return;
   if (!msg.guild) return;
+
+
+  //coins start
+  if(!coinconfig[msg.channel.id]){
+    coinconfig[msg.channel.id] = {
+      setting: 1
+    };
+    fs.writeFile("./coinconfig.json", JSON.stringify(coinconfig), (err) => {
+      if(err) console.log(err)
+    })
+  }
+  if(coinconfig >= 1){
+    if(!coins[msg.author.id]){
+      coins[msg.author.id] = {
+        coins:0
+      };
+    }
+  
+    let coinAmt = Math.floor(Math.random() * 15) + 1;
+    let baseAmt = Math.floor(Math.random() * 20) + 1;
+    if(coinAmt === baseAmt){
+      coins[msg.author.id] = {
+        coins: coins[msg.author.id].coins + coinAmt
+      };
+    fs.writeFile("./coins.json", JSON.stringify(coins), (err) => {
+      if (err) console.log(err)
+    });
+    let embed = new Discord.RichEmbed
+    embed.setAuthor(msg.author.username, msg.author.avatarURL)
+    embed.setTitle("coins!")
+    embed.setThumbnail("https://cdn.discordapp.com/attachments/547952873355476992/559414909142827060/SCOINthumbnail.png")
+    embed.setColor(0xD4AF37)
+    embed.setDescription(`you just earned ${coinAmt} coins! you currently have ${coins[msg.author.id].coins} coins.`)
+    embed.setFooter("Use "+require('./settings.json').prefix+"help to see all of my commands");
+    msg.channel.send({embed}).then(msg => {msg.delete(5000)});
+    };
+  
+  }
+  //coins end
+
+
   if (!msg.content.startsWith(settings.prefix)) return;
   const args = msg.content.slice(settings.prefix.length).trim().split(/ +/g);
   const command = args.shift();
@@ -201,13 +319,6 @@ client.on('message', msg => {
 
 
 client.on('guildMemberAdd', member => {
-    let channel = member.guild.channels.find(ch => ch.name === 'general');
-    let embed = new Discord.RichEmbed();
-    embed.setTitle("New Member!");
-    embed.setColor(0x16ff00);
-    embed.setDescription('Welcome to the server, ' + member.user.username);
-    embed.setFooter("Use "+settings.prefix+"help to see all of my commands");
-    channel.send({embed});
     if (member.guild.id != "537101504864190464") return;
     channel = client.channels.find(ch => ch.id === '539142431552176139');
     channel.send(":arrow_right: " + member.user.tag);
@@ -227,38 +338,36 @@ client.on('guildMemberAdd', member => {
     let channel = client.channels.find(ch => ch.id === '539142431552176139');
     channel.send(":no_entry_sign: :hammer: Unbanned User: " + user.tag)
   });
-  client.on('channelCreate', channel => {
-    if (channel.guild.id != "537101504864190464") return;
-    channel.send("First");
-  });
-  client.on('messageDelete', message => {
-    if (message.channel.guild.id != "537101504864190464") return;
-    let channel = client.channels.find(ch => ch.id === '539142431552176139');
-    let embed = new Discord.RichEmbed();
-    embed.setTitle(":wastebasket: Message Delete");
-    embed.setColor(0xFF0000);
-    embed.setDescription('Message by ' + message.author.username + ' deleted on ' + new Date());
-    embed.addField("Message content", message);
-    channel.send({embed});
-  });
-  client.on('messageUpdate', (oldMessage, newMessage) => {
-    try{
-    if (oldMessage.channel.guild.id != "537101504864190464") return;
-    if (oldMessage == newMessage) return;
-    if (newMessage == oldMessage) return;
-    let channel = client.channels.find(ch => ch.id === '539142431552176139');
-    let embed = new Discord.RichEmbed();
-    embed.setTitle(":pencil: Message Edit");
-    embed.setColor(0xFF4500);
-    embed.setDescription('Message by ' + oldMessage.author.username + ' edited on ' + new Date());
-    embed.addField("Old Message", oldMessage);
-    embed.addField("New Message", newMessage);
-    channel.send({embed});  
-    } catch (error) {
-      console.log(error)
-    }  
-  });
+
+  //client.on('messageDelete', message => {
+    //if (message.channel.guild.id != "537101504864190464") return;
+    //let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    //let embed = new Discord.RichEmbed();
+    //embed.setTitle(":wastebasket: Message Delete");
+    //embed.setColor(0xFF0000);
+    //embed.setDescription('Message by ' + message.author.username + ' deleted on ' + new Date());
+    //embed.addField("Message content", message);
+    //channel.send({embed});
+  //});
+
+  //client.on('messageUpdate', (oldMessage, newMessage) => {
+   // try{
+   // if (oldMessage.channel.guild.id != "537101504864190464") return;
+   // if (oldMessage == newMessage) return;
+    //if (newMessage == oldMessage) return;
+    //let channel = client.channels.find(ch => ch.id === '539142431552176139');
+    //let embed = new Discord.RichEmbed();
+    //embed.setTitle(":pencil: Message Edit");
+    //embed.setColor(0xFF4500);
+    //embed.setDescription('Message by ' + oldMessage.author.username + ' edited on ' + new Date());
+    //embed.addField("Old Message", oldMessage); // TODO: Fix this line
+    //embed.addField("New Message", newMessage);
+    //channel.send({embed});  
+    //} catch (error) {
+    //  console.log(error) 
+    //}  
+  //});
 client.login(config.token).catch(function() {
-  console.log('Login failed. The token that you put in is invalid, please put in a new one...'.red);
+  console.log('hey uh, Login failed. The token that you put in is most likely invalid, please put in a new one...'.red);
   process.exit(0);
 });
